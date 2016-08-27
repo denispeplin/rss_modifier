@@ -7,8 +7,7 @@ defmodule RssModifier do
     import Supervisor.Spec, warn: false
 
     children = [
-      # Define workers and child supervisors to be supervised
-      # worker(RssModifier.Worker, [arg1, arg2, arg3]),
+      Plug.Adapters.Cowboy.child_spec(:http, RssModifier.Router, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
