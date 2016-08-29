@@ -1,15 +1,28 @@
 defmodule RssModifier.Router do
   use Plug.Router
 
-  #if Mix.env == :dev do
-  #  use Plug.Debugger
-  #end
+  if Mix.env == :dev do
+    use Plug.Debugger
+  end
 
-  plug Plug.Logger
+  if Mix.env != :test do
+    plug Plug.Logger
+  end
+
+  plug :fetch_query_params
   plug :match
   plug :dispatch
 
   get "/" do
-    send_resp(conn, 200, "Hello World!")
+    case RssModifier.Feed.modify(conn.params) do
+      {:ok, feed} ->
+        send_resp(conn, :ok, feed)
+      {:error, code, message} ->
+        send_resp(conn, code, message)
+    end
+  end
+
+  match _ do
+    send_resp(conn, :not_found, "Path not found.")
   end
 end
