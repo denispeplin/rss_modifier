@@ -1,18 +1,15 @@
 defmodule RssModifier.Feed do
   alias RssModifier.Fetch
-  alias RssModifier.Source
   alias RssModifier.Modify
+  alias RssModifier.Params
 
-  def modify(%{"source" => url, "patterns" => patterns, "replacements" => replacements}) do
-    modifiers = List.zip [patterns, replacements]
-    if Source.invalid?(url) do
-      {:error, :bad_request, "Source URL is invalid"}
-    else
-      fetch(url) |> modify(modifiers)
+  def modify(params) do
+    case Params.prepare(params) do
+      {:error, message} ->
+        {:error, :bad_request, message}
+      {:ok, url, modifiers} ->
+        fetch(url) |> modify(modifiers)
     end
-  end
-  def modify(_) do
-    {:error, :bad_request, "Provide source, patterns and replacements"}
   end
 
   defp fetch(url) do
