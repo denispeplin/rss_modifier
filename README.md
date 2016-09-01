@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/denispeplin/rss_modifier.svg?branch=master)](https://travis-ci.org/denispeplin/rss_modifier)
+
 # RssModifier
 
 **TODO: Add description**
