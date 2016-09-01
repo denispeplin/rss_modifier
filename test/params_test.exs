@@ -24,6 +24,27 @@ defmodule RssModifier.ParamsTest do
       assert result == {:error, "Source URL is invalid"}
     end
 
+    test "full set of parameters, patterns is not a list", %{params: params} do
+      result = params
+      |> Map.merge(%{"patterns" => "not_list"})
+      |> Params.prepare
+      assert result == {:error, "Patterns and replacements must be lists"}
+    end
+
+    test "full set of parameters, replacements is not a list", %{params: params} do
+      result = params
+      |> Map.merge(%{"replacements" => "not_list"})
+      |> Params.prepare
+      assert result == {:error, "Patterns and replacements must be lists"}
+    end
+
+    test "full set of parameters, patterns and replacements are not lists", %{params: params} do
+      result = params
+      |> Map.merge(%{"patterns" => "not_list", "replacements" => "not_list"})
+      |> Params.prepare
+      assert result == {:error, "Patterns and replacements must be lists"}
+    end
+
     test "wrong params" do
       params = %{"src" => "http://example.com"}
       assert Params.prepare(params) == {:error, "Provide source, patterns and replacements"}
