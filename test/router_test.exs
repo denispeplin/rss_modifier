@@ -11,26 +11,26 @@ defmodule RssModifier.RouterTest do
   test "calls Feed and retuns result" do
     conn = conn(:get, "/?src=abc")
 
-    with_mock Feed, [modify: fn(_params) -> {:ok, "feed contents"} end] do
+    with_mock Feed, [call: fn(_params) -> {:ok, "feed contents"} end] do
       conn = Router.call(conn, @opts)
 
       assert conn.state == :sent
       assert conn.status == 200
       assert conn.resp_body == "feed contents"
-      assert called Feed.modify(%{"src" => "abc"})
+      assert called Feed.call(%{"src" => "abc"})
     end
   end
 
   test "calls Feed and retuns error" do
     conn = conn(:get, "/?wrong=parameter")
 
-    with_mock Feed, [modify: fn(_params) -> {:error, 400, "message"} end] do
+    with_mock Feed, [call: fn(_params) -> {:error, 400, "message"} end] do
       conn = Router.call(conn, @opts)
 
       assert conn.state == :sent
       assert conn.status == 400
       assert conn.resp_body == "message"
-      assert called Feed.modify(%{"wrong" => "parameter"})
+      assert called Feed.call(%{"wrong" => "parameter"})
     end
   end
 

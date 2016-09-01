@@ -14,7 +14,7 @@ defmodule RssModifier.Router do
   plug :dispatch
 
   get "/" do
-    case RssModifier.Feed.modify(conn.params) do
+    case RssModifier.Feed.call(conn.params) do
       {:ok, feed} ->
         send_resp(conn, :ok, feed)
       {:error, code, message} ->

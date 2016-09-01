@@ -3,7 +3,7 @@ defmodule RssModifier.Feed do
   alias RssModifier.Modify
   alias RssModifier.Params
 
-  def modify(params) do
+  def call(params) do
     case Params.prepare(params) do
       {:error, message} ->
         {:error, :bad_request, message}
