@@ -3,6 +3,7 @@ defmodule RssModifier.FeedTest do
   doctest RssModifier.Feed
   alias RssModifier.Fetch
   alias RssModifier.Feed
+  alias RssModifier.Source
   import Mock
 
   setup do
@@ -25,6 +26,13 @@ defmodule RssModifier.FeedTest do
     with_mock Fetch, [call: fn(_) -> {:error, "Something wrong"} end] do
       assert Feed.modify(params) == {:error, :unprocessable_entity, "Something wrong"}
       assert called Fetch.call(params["source"])
+    end
+  end
+
+  test "full set of parameters, source is invalid", %{params: params} do
+    with_mock Source, [invalid?: fn(_) -> true end] do
+      assert Feed.modify(params) == {:error, :bad_request, "Source URL is invalid"}
+      assert called Source.invalid?(params["source"])
     end
   end
 
