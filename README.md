@@ -2,21 +2,24 @@
 
 # RssModifier
 
-**TODO: Add description**
+RSS feed experiments.
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
+Clone git repository. You should have [Elixir](http://elixir-lang.org/) installed.
 
-  1. Add rss_modifier to your list of dependencies in `mix.exs`:
+## Usage
 
-        def deps do
-          [{:rss_modifier, "~> 0.0.1"}]
-        end
+```
+mix deps.get
+mix run --no-halt
+```
 
-  2. Ensure rss_modifier is started before your application:
+For the moment, only modifier is implemented.
 
-        def application do
-          [applications: [:rss_modifier]]
-        end
+Point a browser to http://localhost:4000/mofidy, provide `source` URL of original feed,
+and two arrays: `patterns` and `replacements`.
 
+## TODO
+
+Front page with a form to prepare request will be provided.

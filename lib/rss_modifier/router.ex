@@ -14,6 +14,10 @@ defmodule RssModifier.Router do
   plug :dispatch
 
   get "/" do
+    send_resp(conn, :ok, "Reserved for a front page")
+  end
+
+  get "/modify" do
     case RssModifier.Feed.call(conn.params) do
       {:ok, feed} ->
         send_resp(conn, :ok, feed)

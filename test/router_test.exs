@@ -8,8 +8,16 @@ defmodule RssModifier.RouterTest do
 
   @opts RssModifier.Router.init([])
 
+  test "calls front page" do
+    conn = conn(:get, "/")
+    conn = Router.call(conn, @opts)
+    assert conn.state == :sent
+    assert conn.status == 200
+    assert conn.resp_body == "Reserved for a front page"
+  end
+
   test "calls Feed and retuns result" do
-    conn = conn(:get, "/?src=abc")
+    conn = conn(:get, "/modify?src=abc")
 
     with_mock Feed, [call: fn(_params) -> {:ok, "feed contents"} end] do
       conn = Router.call(conn, @opts)
@@ -22,7 +30,7 @@ defmodule RssModifier.RouterTest do
   end
 
   test "calls Feed and retuns error" do
-    conn = conn(:get, "/?wrong=parameter")
+    conn = conn(:get, "/modify?wrong=parameter")
 
     with_mock Feed, [call: fn(_params) -> {:error, 400, "message"} end] do
       conn = Router.call(conn, @opts)
