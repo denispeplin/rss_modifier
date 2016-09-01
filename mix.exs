@@ -4,7 +4,7 @@ defmodule RssModifier.Mixfile do
   def project do
     [app: :rss_modifier,
      version: "0.0.1",
-     elixir: "~> 1.2",
+     elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps]
@@ -14,7 +14,7 @@ defmodule RssModifier.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :cowboy, :plug],
+    [applications: [:logger, :cowboy, :plug, :httpoison],
      mod: {RssModifier, []}]
   end
 
@@ -30,6 +30,7 @@ defmodule RssModifier.Mixfile do
   defp deps do
     [{:cowboy, "~> 1.0.0"},
      {:plug, "~> 1.0"},
+     {:httpoison, "~> 0.9.0"},
      {:mock, "~> 0.1.1", only: :test}
    ]
   end
