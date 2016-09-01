@@ -9,15 +9,15 @@ defmodule RssModifier.FeedTest do
   setup do
     params = %{
       "source" => "http://example.com",
-      "patterns" => ["p1", "p2"],
-      "replacements" => ["r1", "r2"]
+      "patterns" => ["response", "body"],
+      "replacements" => ["modified response body", "twice"]
     }
     {:ok, params: params}
   end
 
   test "full set of parameters, fetch is :ok", %{params: params} do
     with_mock Fetch, [call: fn(_) -> {:ok, "response body"} end] do
-      assert Feed.modify(params) == {:ok, "response body"}
+      assert Feed.modify(params) == {:ok, "modified response twice twice"}
       assert called Fetch.call(params["source"])
     end
   end
