@@ -16,7 +16,7 @@ defmodule RssModifier.Params do
         {:ok, url, modifiers}
     end
   end
-  def prepare(%{"source" => _, "patterns" => patterns, "replacements" => replacements}) do
+  def prepare(%{"source" => _, "patterns" => _, "replacements" => _}) do
     {:error, "Patterns and replacements must be lists"}
   end
   def prepare(_) do
