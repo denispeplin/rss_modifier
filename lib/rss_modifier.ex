@@ -6,8 +6,10 @@ defmodule RssModifier do
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
+    port = Application.get_env(:rss_modifier, :port)
+
     children = [
-      Plug.Adapters.Cowboy.child_spec(:http, RssModifier.Router, [])
+      Plug.Adapters.Cowboy.child_spec(:http, RssModifier.Router, [], [port: port])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
