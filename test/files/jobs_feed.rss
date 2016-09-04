@@ -1,0 +1,27 @@
+<rss version="2.0">
+  <channel>
+    <title>Awesome Job</title>
+    <description>Most awesome jobs in the world!</description>
+    <link>http://example.com</link>
+    <item>
+      <title>Ruby developer</title>
+      <description>Remote position. Mostly backend stuff.</description>
+      <guid isPermaLink="true">http://example.com/jobs/1</guid>
+    </item>
+    <item>
+      <title>Ruby developer</title>
+      <description>Onsite position</description>
+      <guid isPermaLink="true">http://example.com/jobs/2</guid>
+    </item>
+    <item>
+      <title>Elixir developer</title>
+      <description>Remote position</description>
+      <guid isPermaLink="true">http://example.com/jobs/3</guid>
+    </item>
+    <item>
+      <title>Backend Elixir developer</title>
+      <description>Onsite position</description>
+      <guid isPermaLink="true">http://example.com/jobs/4</guid>
+    </item>
+  </channel>
+</rss>

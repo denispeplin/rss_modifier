@@ -8,7 +8,7 @@ defmodule RssModifier.Feed do
       {:error, message} ->
         {:error, :bad_request, message}
       {:ok, url, modifiers} ->
-        fetch(url) |> modify(modifiers)
+        fetch(url) |> filter |> modify(modifiers)
     end
   end
 
@@ -21,10 +21,13 @@ defmodule RssModifier.Feed do
     end
   end
 
+  defp filter({:ok, feed}) do
+    {:ok, RssFlow.filter(feed, "Elixir")}
+  end
+  defp filter({:error, _, _} = error), do: error
+
   defp modify({:ok, source}, modifiers) do
     Modify.call(source, modifiers)
   end
-  defp modify(error, _) do
-    error
-  end
+  defp modify({:error, _, _} = error, _), do: error
 end

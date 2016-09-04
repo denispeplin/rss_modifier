@@ -5,19 +5,21 @@ defmodule RssModifier.FeedTest do
   alias RssModifier.Feed
   alias RssModifier.Params
   import Mock
+  import ExUnit.TestHelpers, only: [read_rss: 1, read_rss!: 1]
 
   setup do
     params = %{
       "source" => "http://example.com",
-      "patterns" => ["response", "body"],
-      "replacements" => ["modified response body", "twice"]
+      "patterns" => ["world", "Onsite"],
+      "replacements" => ["this country", "Remote"]
     }
     {:ok, params: params}
   end
 
   test "full set of parameters, fetch is :ok", %{params: params} do
-    with_mock Fetch, [call: fn(_) -> {:ok, "response body"} end] do
-      assert Feed.call(params) == {:ok, "modified response twice twice"}
+    with_mock Fetch, [call: fn(_) -> read_rss("jobs_feed") end] do
+      {:ok, feed} = Feed.call(params)
+      assert RssFlow.parse(feed) == RssFlow.parse(read_rss!("jobs_feed_elixir_modified"))
       assert called Fetch.call(params["source"])
     end
   end

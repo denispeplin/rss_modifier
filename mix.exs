@@ -14,7 +14,7 @@ defmodule RssModifier.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :cowboy, :plug, :httpoison],
+    [applications: [:logger, :cowboy, :plug, :httpoison, :rss_flow],
      mod: {RssModifier, []}]
   end
 
@@ -31,6 +31,7 @@ defmodule RssModifier.Mixfile do
     [{:cowboy, "~> 1.0.0"},
      {:plug, "~> 1.0"},
      {:httpoison, "~> 0.9.0"},
+     {:rss_flow, "~> 0.1.0", path: "../rss_flow"},
      {:mock, "~> 0.1.1", only: :test}
    ]
   end
