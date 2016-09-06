@@ -11,7 +11,8 @@ defmodule RssModifier.FeedTest do
     params = %{
       "source" => "http://example.com",
       "patterns" => ["world", "Onsite"],
-      "replacements" => ["this country", "Remote"]
+      "replacements" => ["this country", "Remote"],
+      "filter" => "Elixir"
     }
     {:ok, params: params}
   end
@@ -24,6 +25,14 @@ defmodule RssModifier.FeedTest do
     end
   end
 
+  test "full set of parameters, fetch is :ok, no filter", %{params: params} do
+    with_mock Fetch, [call: fn(_) -> read_rss("jobs_feed") end] do
+      {:ok, feed} = Feed.call(Map.delete(params, "filter"))
+      assert RssFlow.parse(feed) == RssFlow.parse(read_rss!("jobs_feed_modified"))
+      assert called Fetch.call(params["source"])
+    end
+  end
+
   test "full set of parameters, fetch is :error", %{params: params} do
     with_mock Fetch, [call: fn(_) -> {:error, "Something wrong"} end] do
       assert Feed.call(params) == {:error, :unprocessable_entity, "Something wrong"}
@@ -32,9 +41,9 @@ defmodule RssModifier.FeedTest do
   end
 
   test "full set of parameters, source is invalid", %{params: params} do
-    with_mock Params, [prepare: fn(_) -> {:error, "Error preparing parameters"} end] do
+    with_mock Params, [check: fn(_) -> {:error, "Error preparing parameters"} end] do
       assert Feed.call(params) == {:error, :bad_request, "Error preparing parameters"}
-      assert called Params.prepare(params)
+      assert called Params.check(params)
     end
   end
 end

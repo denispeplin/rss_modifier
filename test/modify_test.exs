@@ -4,19 +4,24 @@ defmodule RssModifier.ModifyTest do
 
   describe "call/1" do
     test "use with single modifier" do
-      modifiers = [{"modifier", "replacement"}]
-      assert Modify.call("text with modifier", modifiers) == {:ok, "text with replacement"}
+      patterns = ["modifier"]
+      replacements = ["replacement"]
+      assert Modify.call("text with modifier", patterns, replacements) ==
+        {:ok, "text with replacement"}
     end
 
     test "use with miltiple modifiers" do
-      modifiers = [{"modifier1", "replacement1"}, {"modifier2", "replacement2"}]
-      assert Modify.call("text with modifier1 and modifier2", modifiers) ==
+      patterns = ["modifier1", "modifier2"]
+      replacements = ["replacement1", "replacement2"]
+      assert Modify.call("text with modifier1 and modifier2", patterns, replacements) ==
         {:ok, "text with replacement1 and replacement2"}
     end
 
     test "use modification sequence" do
-      modifiers = [{"modifier", "replacement"}, {"replacement", "some stuff"}]
-      assert Modify.call("text with modifier", modifiers) == {:ok, "text with some stuff"}
+      patterns = ["modifier", "replacement"]
+      replacements = ["replacement", "some stuff"]
+      assert Modify.call("text with modifier",  patterns, replacements) ==
+        {:ok, "text with some stuff"}
     end
   end
 end
