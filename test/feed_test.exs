@@ -5,19 +5,30 @@ defmodule RssModifier.FeedTest do
   alias RssModifier.Feed
   alias RssModifier.Params
   import Mock
+  import ExUnit.TestHelpers, only: [read_rss: 1, read_rss!: 1]
 
   setup do
     params = %{
       "source" => "http://example.com",
-      "patterns" => ["response", "body"],
-      "replacements" => ["modified response body", "twice"]
+      "patterns" => ["world", "Onsite"],
+      "replacements" => ["this country", "Remote"],
+      "filter" => "Elixir"
     }
     {:ok, params: params}
   end
 
   test "full set of parameters, fetch is :ok", %{params: params} do
-    with_mock Fetch, [call: fn(_) -> {:ok, "response body"} end] do
-      assert Feed.call(params) == {:ok, "modified response twice twice"}
+    with_mock Fetch, [call: fn(_) -> read_rss("jobs_feed") end] do
+      {:ok, feed} = Feed.call(params)
+      assert RssFlow.parse(feed) == RssFlow.parse(read_rss!("jobs_feed_elixir_modified"))
+      assert called Fetch.call(params["source"])
+    end
+  end
+
+  test "full set of parameters, fetch is :ok, no filter", %{params: params} do
+    with_mock Fetch, [call: fn(_) -> read_rss("jobs_feed") end] do
+      {:ok, feed} = Feed.call(Map.delete(params, "filter"))
+      assert RssFlow.parse(feed) == RssFlow.parse(read_rss!("jobs_feed_modified"))
       assert called Fetch.call(params["source"])
     end
   end
@@ -30,9 +41,9 @@ defmodule RssModifier.FeedTest do
   end
 
   test "full set of parameters, source is invalid", %{params: params} do
-    with_mock Params, [prepare: fn(_) -> {:error, "Error preparing parameters"} end] do
+    with_mock Params, [check: fn(_) -> {:error, "Error preparing parameters"} end] do
       assert Feed.call(params) == {:error, :bad_request, "Error preparing parameters"}
-      assert called Params.prepare(params)
+      assert called Params.check(params)
     end
   end
 end
