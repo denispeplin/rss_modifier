@@ -31,7 +31,7 @@ defmodule RssModifier.Mixfile do
     [{:cowboy, "~> 1.0.0"},
      {:plug, "~> 1.0"},
      {:httpoison, "~> 0.9.0"},
-     {:rss_flow, "~> 0.1.0", path: "../rss_flow"},
+     {:rss_flow, "~> 0.1.0"},
      {:mock, "~> 0.1.1", only: :test}
    ]
   end
